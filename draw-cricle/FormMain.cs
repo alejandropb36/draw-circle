@@ -62,5 +62,31 @@ namespace draw_cricle
                 radio.X = radio.Y = -1;
             }
         }
+
+        private void DDA(Point centro, Point radio)
+        {
+            double r = 0;
+            int xc = 0;
+            int yc = 0;
+            int xf = 0;
+            int yf = 0;
+            int xk = 0;
+            int yk = 0;
+
+            xc = centro.X;
+            yc = centro.Y;
+            xf = radio.X;
+            yf = radio.Y;
+            r = Math.Sqrt((Math.Abs((yf - yc) ^ 2)) + (Math.Abs((xf - xc) ^ 2)));
+            r = Math.Round(r);
+
+
+
+
+
+
+             
+
+        }
     }
 }
