@@ -56,7 +56,7 @@ namespace draw_cricle
                 Console.WriteLine("punto inicial: (" + centro.X + ", " + centro.Y + ")");
                 Console.WriteLine("punto final: (" + radio.X + ", " + radio.Y + ")");
 
-                //DDA(initial, final);
+                DDA(centro, radio);
                 //bresenham(initial, final);
                 centro.X = centro.Y = -1;
                 radio.X = radio.Y = -1;
@@ -71,22 +71,48 @@ namespace draw_cricle
             int xf = 0;
             int yf = 0;
             int xk = 0;
-            int yk = 0;
+            double yk = 0;
+            int x = 0;
+            int y = 0;
+            int a = 0;
+            int b = 0;
+
 
             xc = centro.X;
             yc = centro.Y;
             xf = radio.X;
             yf = radio.Y;
-            r = Math.Sqrt((Math.Abs((yf - yc) ^ 2)) + (Math.Abs((xf - xc) ^ 2)));
+
+            a = xf - xc;
+            b = yf - yc;
+
+
+            r = Math.Sqrt(Math.Pow(a, 2) + Math.Pow(b, 2));
             r = Math.Round(r);
+            r = Math.Abs(r);
 
+            yk = Math.Sqrt(Math.Pow(r, 2) - Math.Pow(xk, 2));
+            yk = Math.Round(yk);
 
+            for (xk = (int)-r; xk <= r; xk++)
+            {
+                yk = Math.Sqrt(Math.Pow(r, 2) - Math.Pow(xk, 2));
+                yk = Math.Round(yk);
+                x = xk + xc;
+                y = (int)yk + yc;
+                int y2 = (int)-yk + yc;
 
+                if ((y < bmp.Height && y > 0) && (y2 < bmp.Height && y2 > 0)) 
+                {
+                    if(x < bmp.Width && x > 0)
+                    {
+                        bmp.SetPixel(x, y, Color.Red); // Oct2
+                        bmp.SetPixel(x, y2, Color.Red); // Oct2
+                    }
+                }
+            }
 
-
-
-             
-
+            pictureBox1.Image = bmp;
         }
     }
 }
