@@ -14,12 +14,14 @@ namespace draw_cricle
     {
         Point centro, radio;
         Bitmap bmp;
+        const int width = 500;
+        const int height = 500;
 
         public FormMain()
         {
             centro = new Point(-1, -1);
             radio = new Point(-1, -1);
-            bmp = new Bitmap(500, 500);
+            bmp = new Bitmap(width, height);
             InitializeComponent();
         }
 
@@ -29,7 +31,7 @@ namespace draw_cricle
             radio.X = radio.Y = -1;
 
             Graphics g = Graphics.FromImage(bmp);
-            g.FillRectangle(Brushes.White, 0, 0, 500, 500);
+            g.FillRectangle(Brushes.White, 0, 0, width, height);
             pictureBox1.Image = bmp;
 
             labelAdd.Text = "ADD: 0 s";
@@ -63,20 +65,87 @@ namespace draw_cricle
             }
         }
 
+        // function to draw all other 7 pixels 
+        // present at symmetric position 
+        private void setPixelCircle(int xc, int yc, int x, int y, Color color)
+        {
+            if((xc + x) <= pictureBox1.Width && (xc + x) >= 0)
+            {
+                if((yc + y) <= pictureBox1.Height && (yc + y) >= 0)
+                {
+                    bmp.SetPixel(xc + x, yc + y, color);
+                }
+            }
+            if ((xc - x) <= pictureBox1.Width && (xc - x) >= 0)
+            {
+                if ((yc + y) <= pictureBox1.Height && (yc + y) >= 0)
+                {
+                    bmp.SetPixel(xc - x, yc + y, color);
+                }
+            }
+            if ((xc + x) <= pictureBox1.Width && (xc + x) >= 0)
+            {
+                if ((yc - y) <= pictureBox1.Height && (yc - y) >= 0)
+                {
+                    bmp.SetPixel(xc + x, yc - y, color);
+                }
+            }
+            if ((xc - x) <= pictureBox1.Width && (xc - x) >= 0)
+            {
+                if ((yc - y) <= pictureBox1.Height && (yc - y) >= 0)
+                {
+                    bmp.SetPixel(xc - x, yc - y, color);
+                }
+            }
+            if ((xc + y) <= pictureBox1.Width && (xc + y) >= 0)
+            {
+                if ((yc + x) <= pictureBox1.Height && (yc + x) >= 0)
+                {
+                    bmp.SetPixel(xc + y, yc + x, color);
+                }
+            }
+            if ((xc - y) <= pictureBox1.Width && (xc - y) >= 0)
+            {
+                if ((yc + x) <= pictureBox1.Height && (yc + x) >= 0)
+                {
+                    bmp.SetPixel(xc - y, yc + x, color);
+                }
+            }
+            if ((xc + y) <= pictureBox1.Width && (xc + y) >= 0)
+            {
+                if ((yc - x) <= pictureBox1.Height && (yc - x) >= 0)
+                {
+                    bmp.SetPixel(xc + y, yc - x, color);
+                }
+            }
+            if ((xc - y) <= pictureBox1.Width && (xc - y) >= 0)
+            {
+                if ((yc - x) <= pictureBox1.Height && (yc - x) >= 0)
+                {
+                    bmp.SetPixel(xc - y, yc - x, color);
+                }
+            }
+            //bmp.SetPixel(xc + x, yc + y, color);
+            //bmp.SetPixel(xc - x, yc + y, color);
+            //bmp.SetPixel(xc + x, yc - y, color);
+            //bmp.SetPixel(xc - x, yc - y, color);
+            //bmp.SetPixel(xc + y, yc + x, color);
+            //bmp.SetPixel(xc - y, yc + x, color);
+            //bmp.SetPixel(xc + y, yc - x, color);
+            //bmp.SetPixel(xc - y, yc - x, color);
+        }
+
         private void DDA(Point centro, Point radio)
         {
             double r = 0;
+            double yk = 0;
+            int xk = 0;
             int xc = 0;
             int yc = 0;
             int xf = 0;
             int yf = 0;
-            int xk = 0;
-            double yk = 0;
-            int x = 0;
-            int y = 0;
             int a = 0;
             int b = 0;
-
 
             xc = centro.X;
             yc = centro.Y;
@@ -86,7 +155,6 @@ namespace draw_cricle
             a = xf - xc;
             b = yf - yc;
 
-
             r = Math.Sqrt(Math.Pow(a, 2) + Math.Pow(b, 2));
             r = Math.Round(r);
             r = Math.Abs(r);
@@ -94,25 +162,20 @@ namespace draw_cricle
             yk = Math.Sqrt(Math.Pow(r, 2) - Math.Pow(xk, 2));
             yk = Math.Round(yk);
 
-            for (xk = (int)-r; xk <= r; xk++)
+            for (xk = 0; xk <= yk; xk++)
             {
                 yk = Math.Sqrt(Math.Pow(r, 2) - Math.Pow(xk, 2));
                 yk = Math.Round(yk);
-                x = xk + xc;
-                y = (int)yk + yc;
-                int y2 = (int)-yk + yc;
-
-                if ((y < bmp.Height && y > 0) && (y2 < bmp.Height && y2 > 0)) 
-                {
-                    if(x < bmp.Width && x > 0)
-                    {
-                        bmp.SetPixel(x, y, Color.Red); // Oct2
-                        bmp.SetPixel(x, y2, Color.Red); // Oct2
-                    }
-                }
+                
+                setPixelCircle(xc, yc, xk, (int)yk, Color.Red);
             }
 
             pictureBox1.Image = bmp;
+        }
+
+        private void bresenham(Point centro, Point radio)
+        {
+
         }
     }
 }
